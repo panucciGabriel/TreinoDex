@@ -36,6 +36,7 @@ A API foi projetada para atender aos seguintes casos de uso:
    ```bash
    git clone [https://github.com/seu-usuario/treinodex.git](https://github.com/seu-usuario/treinodex.git)
    cd treinodex
+
 2. Configure o Banco de Dados
 Crie um banco de dados no PostgreSQL chamado treinodex_db. As configurações padrão no application.yml são:
 
