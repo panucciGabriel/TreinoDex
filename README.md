@@ -1,104 +1,204 @@
-# TreinoDex Backend API 🏋️‍♂️
+---
 
-O **TreinoDex** é uma API RESTful desenvolvida em Spring Boot voltada para o gerenciamento de treinos. A plataforma permite que Personal Trainers se cadastrem, gerenciem seus alunos, montem rotinas de treinos e registrem os exercícios detalhados para cada sessão.
+# 🏋️‍♂️ TreinoDex Backend API
+
+O **TreinoDex** é uma API RESTful desenvolvida em **Spring Boot** voltada para o gerenciamento de treinos. A plataforma permite que **Personal Trainers** se cadastrem, gerenciem seus alunos, montem rotinas de treino e registrem exercícios detalhados para cada sessão.
+
+---
 
 ## 🚀 Tecnologias Utilizadas
 
 Este projeto foi construído utilizando as seguintes tecnologias e bibliotecas:
 
 * **Java 21**
-* **Spring Boot** (Web, Data JPA, Security, Validation)
+* **Spring Boot**
+
+  * Web
+  * Data JPA
+  * Security
+  * Validation
 * **PostgreSQL** (Banco de Dados Relacional)
-* **Spring Security & JWT (Auth0)** (Autenticação e Autorização)
+* **Spring Security + JWT (Auth0)** (Autenticação e Autorização)
 * **Flyway** (Migração de Banco de Dados)
-* **Lombok** (Redução de Boilerplate)
-* **Maven** (Gerenciamento de Dependências)
+* **Lombok** (Redução de boilerplate)
+* **Maven** (Gerenciamento de dependências)
+
+---
 
 ## ⚙️ Arquitetura e Funcionalidades
 
 A API foi projetada para atender aos seguintes casos de uso:
 
-* **Autenticação:** Cadastro de novos usuários (Personal Trainers) e Login com geração de Token JWT.
-* **Alunos:** Operações de CRUD (Criação, Leitura, Atualização e Exclusão) de alunos. Cada aluno é vinculado estritamente ao Personal Trainer que o cadastrou.
-* **Treinos (Workouts):** Criação e listagem de fichas de treinos vinculadas a um aluno específico.
-* **Exercícios:** Registro de exercícios (nome, séries, repetições, descanso e peso) associados a um treino.
+### 🔐 Autenticação
 
-## 🛠️ Como executar o projeto localmente
+* Cadastro de novos usuários (Personal Trainers)
+* Login com geração de Token JWT
 
-### Pré-requisitos
+### 🧑‍🎓 Alunos
+
+* CRUD completo de alunos:
+
+  * Criar
+  * Listar
+  * Atualizar
+  * Excluir
+* Cada aluno é vinculado ao Personal Trainer que o cadastrou
+
+### 🏋️ Treinos (Workouts)
+
+* Criação de fichas de treino
+* Listagem de treinos por aluno
+
+### 🏃 Exercícios
+
+* Registro de exercícios contendo:
+
+  * Nome
+  * Séries
+  * Repetições
+  * Tempo de descanso
+  * Peso
+* Associação com treinos específicos
+
+---
+
+## 🛠️ Como Executar o Projeto Localmente
+
+### ✅ Pré-requisitos
+
 * Java 21 instalado
 * Maven instalado
 * PostgreSQL rodando localmente (ou via Docker)
 
-### Passo a Passo
+---
 
-1. **Clone o repositório**
-   ```bash
-   git clone [https://github.com/seu-usuario/treinodex.git](https://github.com/seu-usuario/treinodex.git)
-   cd treinodex
+### 📥 Passo a Passo
 
+#### 1. Clone o repositório
 
-2. **Configure o Banco de Dados**
-Crie um banco de dados no PostgreSQL chamado treinodex_db. As configurações padrão no application.yml são:
+```bash
+git clone https://github.com/seu-usuario/treinodex.git
+cd treinodex
+```
 
-   URL: jdbc:postgresql://localhost:5432/treinodex_db
+---
 
-   Utilizador: postgres
+#### 2. Configure o Banco de Dados
 
-   Palavra-passe: postgres
+Crie um banco no PostgreSQL com o nome:
 
-   Obs: Pode alterar estas configurações passando as variáveis de ambiente DB_URL, DB_USER e DB_PASSWORD.
+```
+treinodex_db
+```
 
-   Variáveis de Ambiente (Opcional)
-   O projeto utiliza a seguinte variável para a assinatura do token JWT:
+**Configurações padrão (`application.yml`):**
 
-   JWT_SECRET (Valor padrão: chave_secreta_local_treinodex_123456789)
+* URL: `jdbc:postgresql://localhost:5432/treinodex_db`
+* Usuário: `postgres`
+* Senha: `postgres`
 
-   Execute a aplicação
-   Na raiz do projeto, execute o comando Maven:
+💡 Você pode alterar usando variáveis de ambiente:
 
-   ```Bash
-   ./mvnw spring-boot:run
-   A API estará disponível em http://localhost:8080.`
-   ```
+* `DB_URL`
+* `DB_USER`
+* `DB_PASSWORD`
 
-   📚 Principais Endpoints da API
-   Para aceder à maioria dos endpoints, é necessário enviar o Token JWT no header da requisição:
-   Authorization: Bearer <seu_token>
+---
 
-   🔐 Autenticação (/auth)
-   POST /auth/register - Regista um novo utilizador (Personal Trainer).
+### 🔑 Variáveis de Ambiente (Opcional)
 
-   POST /auth/login - Autentica o utilizador e retorna o Token JWT.
+Para assinatura do token JWT:
 
-   🧑‍🎓 Alunos (/students)
-   POST /students - Regista um novo aluno.
+```
+JWT_SECRET=chave_secreta_local_treinodex_123456789
+```
 
-   GET /students - Lista todos os alunos vinculados ao Personal autenticado.
+---
 
-   PUT /students/{id} - Atualiza as informações de um aluno.
+### ▶️ Executando a aplicação
 
-   DELETE /students/{id} - Remove um aluno.
+Na raiz do projeto, execute:
 
-   🏋️ Treinos (/workouts)
-   POST /workouts/student/{studentId} - Cria uma nova ficha de treino para um aluno.
+```bash
+./mvnw spring-boot:run
+```
 
-   GET /workouts/student/{studentId} - Lista todos os treinos de um aluno.
+A API estará disponível em:
 
-   🏃 Exercícios (/exercises)
-   POST /exercises/workout/{workoutId} - Adiciona um exercício a um treino existente.
+```
+http://localhost:8080
+```
 
-   GET /exercises/workout/{workoutId} - Lista os exercícios de um determinado treino.
+---
 
-   🗄️ Estrutura do Banco de Dados
-   O banco de dados gere as seguintes entidades principais:
+## 📚 Principais Endpoints da API
 
-   User (Utilizadores): Representa o administrador ou Personal Trainer.
+⚠️ A maioria dos endpoints requer autenticação via JWT:
 
-   Student (Alunos): Vinculados a um Personal Trainer (User).
+```
+Authorization: Bearer <seu_token>
+```
 
-   Workout (Treinos): Vinculados a um Aluno.
+---
 
-   Exercise (Exercícios): Vinculados a um Treino.
+### 🔐 Autenticação (`/auth`)
 
-   Desenvolvido por Gabriel Panucci.
+| Método | Endpoint         | Descrição                 |
+| ------ | ---------------- | ------------------------- |
+| POST   | `/auth/register` | Registra um novo usuário  |
+| POST   | `/auth/login`    | Autentica e retorna o JWT |
+
+---
+
+### 🧑‍🎓 Alunos (`/students`)
+
+| Método | Endpoint         | Descrição                           |
+| ------ | ---------------- | ----------------------------------- |
+| POST   | `/students`      | Cria um novo aluno                  |
+| GET    | `/students`      | Lista alunos do usuário autenticado |
+| PUT    | `/students/{id}` | Atualiza um aluno                   |
+| DELETE | `/students/{id}` | Remove um aluno                     |
+
+---
+
+### 🏋️ Treinos (`/workouts`)
+
+| Método | Endpoint                        | Descrição                 |
+| ------ | ------------------------------- | ------------------------- |
+| POST   | `/workouts/student/{studentId}` | Cria treino para um aluno |
+| GET    | `/workouts/student/{studentId}` | Lista treinos do aluno    |
+
+---
+
+### 🏃 Exercícios (`/exercises`)
+
+| Método | Endpoint                         | Descrição                    |
+| ------ | -------------------------------- | ---------------------------- |
+| POST   | `/exercises/workout/{workoutId}` | Adiciona exercício ao treino |
+| GET    | `/exercises/workout/{workoutId}` | Lista exercícios do treino   |
+
+---
+
+## 🗄️ Estrutura do Banco de Dados
+
+O sistema é composto pelas seguintes entidades principais:
+
+* **User (Usuários)**
+  Representa o Personal Trainer
+
+* **Student (Alunos)**
+  Vinculados a um User
+
+* **Workout (Treinos)**
+  Vinculados a um Student
+
+* **Exercise (Exercícios)**
+  Vinculados a um Workout
+
+---
+
+## 👨‍💻 Autor
+
+Desenvolvido por **Gabriel Augusto Panucci**
+
+---
