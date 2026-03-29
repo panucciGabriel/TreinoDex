@@ -5,6 +5,7 @@ import com.treinodex.backend.domain.exercise.ExercisesRepository;
 import com.treinodex.backend.domain.user.User;
 import com.treinodex.backend.domain.workout.Workout;
 import com.treinodex.backend.domain.workout.WorkoutRepository;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -27,7 +28,7 @@ public class ExerciseController {
     }
 
     @PostMapping("/workout/{workoutId}")
-    public ResponseEntity<ExerciseResponse> createExercise(@PathVariable UUID workoutId, @RequestBody ExerciseRequest request, @AuthenticationPrincipal User loggedPersonal) {
+    public ResponseEntity<ExerciseResponse> createExercise(@PathVariable UUID workoutId, @RequestBody @Valid ExerciseRequest request, @AuthenticationPrincipal User loggedPersonal) {
 
         var workoutOptional = workoutRepository.findById(workoutId);
 
