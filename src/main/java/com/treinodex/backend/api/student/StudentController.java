@@ -2,11 +2,13 @@ package com.treinodex.backend.api.student;
 
 import com.treinodex.backend.domain.student.*;
 import com.treinodex.backend.domain.user.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -36,11 +38,9 @@ public class StudentController {
     }
 
     @GetMapping
-    public ResponseEntity<List<StudentResponse>> listStudents(@AuthenticationPrincipal User loggedPersonal) {
-        List<Student> students = studentRepository.findAllByPersonalTrainer(loggedPersonal);
-        List<StudentResponse> response = students.stream()
-                .map(StudentResponse::new)
-                .toList();
+    public ResponseEntity<Page<StudentResponse>> listStudents(@AuthenticationPrincipal User loggedPersonal, @PageableDefault(size = 10, sort = "name") Pageable pageable) {
+        Page<Student> studentsPage = studentRepository.findAllByPersonalTrainer(loggedPersonal, pageable);
+        Page<StudentResponse> response = studentsPage.map(StudentResponse::new);
 
         return ResponseEntity.ok(response);
     }

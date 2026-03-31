@@ -6,6 +6,9 @@ import com.treinodex.backend.domain.user.User;
 import com.treinodex.backend.domain.workout.Workout;
 import com.treinodex.backend.domain.workout.WorkoutRepository;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -60,7 +63,7 @@ public class ExerciseController {
     }
 
     @GetMapping("/workout/{workoutId}")
-    public ResponseEntity<List<ExerciseResponse>> listExercise(@PathVariable UUID workoutId, @AuthenticationPrincipal User loggedPersonal) {
+    public ResponseEntity<Page<ExerciseResponse>> listExercise(@PathVariable UUID workoutId, @AuthenticationPrincipal User loggedPersonal, @PageableDefault(size = 10, sort = "name") Pageable pageable) {
 
         var workoutOptional = workoutRepository.findById(workoutId);
 
@@ -76,11 +79,9 @@ public class ExerciseController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
-        List<Exercise> exercises = exercisesRepository.findAllByWorkout(workout);
+        Page<Exercise> exercises = exercisesRepository.findAllByWorkout(workout, pageable);
 
-        List<ExerciseResponse> response = exercises.stream()
-                .map(ExerciseResponse::new)
-                .toList();
+        Page<ExerciseResponse> response = exercises.map(ExerciseResponse::new);
 
         return ResponseEntity.ok(response);
     }
